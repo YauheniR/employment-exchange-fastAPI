@@ -2,13 +2,12 @@ import uvicorn
 from fastapi import FastAPI
 
 from db.base import database
+from endpoints import auth
+from endpoints import users
 
-app = FastAPI()
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app = FastAPI(title="Employment exchange")
+app.include_router(users.router, prefix="/users", tags=["users"])
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
 
 
 @app.on_event("startup")

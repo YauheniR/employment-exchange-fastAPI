@@ -17,6 +17,15 @@ class User(BaseModel):
     updated_at: datetime.datetime
 
 
+class UserGet(BaseModel):
+    id: Optional[str] = None
+    name: str
+    email: EmailStr
+    is_company: bool
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+
+
 class UserIn(BaseModel):
     name: str
     email: EmailStr

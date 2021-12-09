@@ -15,7 +15,7 @@ class UserRepository(BaseRepository):
         return await self.database.fetch_all(query=query)
 
     async def get_by_id(self, id: int) -> Optional[User]:
-        query = users.select().where(users.c.id == id).first()
+        query = users.select().where(users.c.id == id)
         user = await self.database.fetch_one(query=query)
         if user is None:
             return None
@@ -28,7 +28,7 @@ class UserRepository(BaseRepository):
             email=u.email,
             is_company=u.is_company,
             created_at=datetime.datetime.utcnow(),
-            updatet_at=datetime.datetime.utcnow(),
+            updated_at=datetime.datetime.utcnow(),
         )
 
         values = {**user.dict()}
@@ -46,7 +46,7 @@ class UserRepository(BaseRepository):
             email=u.email,
             is_company=u.is_company,
             created_at=datetime.datetime.utcnow(),
-            updatet_at=datetime.datetime.utcnow(),
+            updated_at=datetime.datetime.utcnow(),
         )
 
         values = {**user.dict()}
@@ -58,8 +58,8 @@ class UserRepository(BaseRepository):
         return user
 
     async def get_by_email(self, email: str) -> Optional[User]:
-        query = users.select().where(users.c.email == email).first()
-        user = self.database.fetch_one(query=query)
+        query = users.select().where(users.c.email == email)
+        user = await self.database.fetch_one(query=query)
         if user is None:
             return None
         return User.parse_obj(user)
