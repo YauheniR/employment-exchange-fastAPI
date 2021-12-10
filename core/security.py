@@ -35,7 +35,7 @@ def create_access_token(data: dict) -> str:
 
 
 def decode_access_token(token: str):
-    encode_jwt = jwt.decode(token=token, key=SECTER_KEY, algorithms=ALGORITHM)
+    encode_jwt = jwt.decode(jwt=token, key=SECTER_KEY, algorithms=ALGORITHM)
     return encode_jwt
 
 
@@ -43,7 +43,7 @@ class JWTBearer(HTTPBearer):
     def __init__(self, auto_error: bool = True):
         super(JWTBearer, self).__init__(auto_error=auto_error)
 
-    async def __call__(self, request: Request, *args, **kwargs):
+    async def __call__(self, request: Request):
         credentials: HTTPAuthorizationCredentials = await super(
             JWTBearer, self
         ).__call__(request=request)
