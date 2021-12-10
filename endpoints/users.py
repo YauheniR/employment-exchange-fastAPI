@@ -2,8 +2,12 @@ from typing import List
 
 from fastapi import APIRouter
 from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import status
 
+from endpoints.depends import get_current_user
 from endpoints.depends import get_user_repository
+from models.user import User
 from models.user import UserGet
 from models.user import UserIn
 from repositories.users import UserRepository
@@ -29,6 +33,14 @@ async def create_user(
 
 @router.put("/", response_model=UserGet)
 async def update_user(
-    id: int, user: UserIn, users: UserRepository = Depends(get_user_repository)
+    id: int,
+    user: UserIn,
+    users: UserRepository = Depends(get_user_repository),
+    current_user: User = Depends(get_current_user),
 ):
+    old_user = await users.get_by_id(id=id)
+    if old_user is None or old_user.email != current_user.email:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     return await users.update(id=id, u=user)
