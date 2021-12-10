@@ -29,4 +29,5 @@ async def get_current_user(
     user = await users.get_by_email(email=email)
     if user is None:
         raise cred_exception
+
     return user
